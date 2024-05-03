@@ -48,8 +48,11 @@ const TvShow = () => {
                 </DropdownMenu>
               </Dropdown>
             </Col>
-            <Col className="d-flex justify-content-end">
-              <Form onSubmit={handlesubmit}>
+            <Col>
+              <Form
+                onSubmit={handlesubmit}
+                className="d-flex align-items-center"
+              >
                 <Form.Control
                   type="text"
                   placeholder="Cerca serie tv"
@@ -61,6 +64,8 @@ const TvShow = () => {
                   <i className="bi bi-search icons"></i>
                 </Button>
               </Form>
+            </Col>
+            <Col className="d-flex justify-content-end">
               <i className="bi bi-grid icons"></i>
 
               <i className="bi bi-grid-3x3 icons"></i>
