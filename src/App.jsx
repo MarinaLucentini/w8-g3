@@ -12,9 +12,10 @@ import {
 import TvShowDetails from "./TvshowDetails";
 
 // import Search from "./Search";
-// import SettingPage from "./SettingPage";
+import SettingPage from "./SettingPage";
 
-// import Profilepage from "./Profilepage";
+import Profilepage from "./Profilepage";
+import Addcomments from "./AddComments";
 
 const App = () => {
   return (
@@ -33,6 +34,18 @@ const App = () => {
           <Route
             path="/tvshow/details/:dinamicId"
             element={<TvShowDetails title={"Serie tv"} />}
+          />
+          <Route
+            path="/profilepage"
+            element={<Profilepage />}
+          />
+          <Route
+            path="/settingpage"
+            element={<SettingPage />}
+          />
+          <Route
+            path="/addcomments/:dinamicId"
+            element={<Addcomments />}
           />
         </Routes>
         <MyFooter />
