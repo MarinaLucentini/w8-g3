@@ -5,11 +5,22 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
+  Button,
+  Form,
 } from "react-bootstrap";
 
 import MyGallery from "./MyGallery";
+import { useState } from "react";
 
 const TvShow = () => {
+  const [searchUser, setSearchUser] = useState("");
+  const handlesubmit = (e) => {
+    e.preventDefault();
+    console.log(searchUser);
+  };
+  const handleChanged = (e) => {
+    setSearchUser(e.target.value);
+  };
   return (
     <>
       <main>
@@ -38,6 +49,18 @@ const TvShow = () => {
               </Dropdown>
             </Col>
             <Col className="d-flex justify-content-end">
+              <Form onSubmit={handlesubmit}>
+                <Form.Control
+                  type="text"
+                  placeholder="Cerca serie tv"
+                  value={searchUser}
+                  onChange={handleChanged}
+                />
+
+                <Button variant="btn" type="submit">
+                  <i className="bi bi-search icons"></i>
+                </Button>
+              </Form>
               <i className="bi bi-grid icons"></i>
 
               <i className="bi bi-grid-3x3 icons"></i>
@@ -45,7 +68,7 @@ const TvShow = () => {
           </Row>
           <MyGallery
             title={"La tua serie tv"}
-            fetch={"Lucifer"}
+            fetch={searchUser}
           />
         </Container>
       </main>

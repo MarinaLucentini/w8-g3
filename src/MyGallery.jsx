@@ -106,7 +106,7 @@ const MyGallery = (props) => {
   useEffect(() => {
     fetchMovies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [props.fetch]);
 
   return (
     <div className="my-3">

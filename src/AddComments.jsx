@@ -1,20 +1,27 @@
 import {
   Alert,
+  Button,
   Card,
-  ListGroup,
+  Col,
+  Container,
+  Form,
+  Row,
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-const TvShowDetails = (props) => {
+const Addcomments = () => {
   const [movies, setMovies] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const params = useParams();
-  const [comment, setComment] = useState([]);
-
+  const [comment, setComment] = useState({
+    comment: "",
+    rate: "",
+    elementId: params.dinamicId,
+  });
   const fetchMovies = () => {
     setIsLoading(true);
     fetch(
@@ -59,10 +66,10 @@ const TvShowDetails = (props) => {
   };
   const fetchComment = () => {
     fetch(
-      "https://striveschool-api.herokuapp.com/api/comments/" +
-        params.dinamicId,
+      "https://striveschool-api.herokuapp.com/api/comments/",
       {
-        method: "GET",
+        method: "POST",
+        body: JSON.stringify(comment),
         headers: {
           "Content-Type": "application/json",
 
@@ -96,8 +103,11 @@ const TvShowDetails = (props) => {
         }
       })
       .then((comments) => {
-        setComment(comments);
-        console.log(comment);
+        setComment({
+          comment: "",
+          rate: "",
+          elementId: params.dinamicId,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -109,75 +119,79 @@ const TvShowDetails = (props) => {
       });
   };
   useEffect(() => {
-    fetchMovies();
-
+    if (params.dinamicId) {
+      fetchMovies();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.dinamicId]);
-  useEffect(() => {
+  const handlesubmit = (e) => {
+    e.preventDefault();
     fetchComment();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [params.dinamicId]);
-
+  };
+  const handleChanged = (propertyName, propertyValue) => {
+    setComment({
+      ...comment,
+      [propertyName]: propertyValue,
+    });
+  };
   return (
-    <div>
-      <Card>
-        <h4>
-          {props.title}
-          {isLoading && (
-            <Spinner animation="border" variant="primary" />
+    <Container>
+      <Row>
+        <Col>
+          <h4>
+            {isLoading && (
+              <Spinner
+                animation="border"
+                variant="primary"
+              />
+            )}
+          </h4>
+          {isError && (
+            <Alert variant="danger">{errorMsg}</Alert>
           )}
-        </h4>
-        {isError && (
-          <Alert variant="danger">{errorMsg}</Alert>
-        )}
-        {movies && (
-          <>
-            <Card.Img
-              variant="top"
-              src={movies.Poster}
-              fluid
-            />
+          <Card>
+            <Card.Img variant="top" src={movies.Poster} />
             <Card.Body>
               <Card.Title>{movies.Title}</Card.Title>
               <Card.Text>{movies.Plot}</Card.Text>
             </Card.Body>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>
-                Production: {movies.Production}
-              </ListGroup.Item>
-              <ListGroup.Item>
-                Actors: {movies.Actors}
-              </ListGroup.Item>
-              {comment.length > 0 ? (
-                comment.map((comm) => {
-                  return (
-                    <>
-                      <ListGroup.Item>
-                        Commento di: {comm.author},{" "}
-                        {comm.comment}, voto: {comm.rate}
-                      </ListGroup.Item>
-                    </>
-                  );
-                })
-              ) : (
-                <>
-                  <Alert variant="danger">
-                    Nessun commento per questo film
-                  </Alert>
-                  <Link
-                    className="btn btn-dark"
-                    to={`/addcomments/${movies.imdbID}`}
-                  >
-                    Scrivi un commento
-                  </Link>
-                </>
-              )}
-            </ListGroup>
-          </>
-        )}
-      </Card>
-    </div>
+          </Card>
+        </Col>
+        <Col>
+          <Form onSubmit={handlesubmit}>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Aggiungi un commento</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                onChange={(e) =>
+                  handleChanged("comment", e.target.value)
+                }
+              />
+            </Form.Group>
+            <Form.Select
+              aria-label="Default select example"
+              onChange={(e) =>
+                handleChanged("rate", e.target.value)
+              }
+            >
+              <option>Seleziona il voto</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </Form.Select>
+            <Button type="submit">
+              Invia il tuo commento
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
   );
 };
-export default TvShowDetails;
+export default Addcomments;

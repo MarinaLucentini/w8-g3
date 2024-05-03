@@ -57,9 +57,9 @@ const MyNav = (props) => {
             <div>
               <i className="bi bi-bell icons"></i>
             </div>
-            <div>
+            <NavLink className="btn" to="/profilepage">
               <i className="bi bi-person-circle icons"></i>
-            </div>
+            </NavLink>
           </Stack>
         </Navbar.Collapse>
       </Container>
