@@ -149,6 +149,12 @@ const TvShowDetails = (props) => {
               <ListGroup.Item>
                 Actors: {movies.Actors}
               </ListGroup.Item>
+              <Link
+                className="btn btn-dark"
+                to={`/addcomments/${movies.imdbID}`}
+              >
+                Scrivi un commento
+              </Link>
               {comment.length > 0 ? (
                 comment.map((comm) => {
                   return (
